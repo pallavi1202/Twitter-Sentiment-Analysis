@@ -41,8 +41,6 @@ pos.words = scan('positive-words.txt',
 neg.words = scan('negative-words.txt',  
                  what='character', 
                  comment.char=';')
-
-
 sentiment <- function(text, pos.words, neg.words) {
   text <- gsub('[[:punct:]]', '', text)
   text <- gsub('[[:cntrl:]]', '', text)
@@ -77,6 +75,8 @@ tweets.text.RedSox <- lapply(tweetsRedSox, function(t){t$getText()})
 
 data.source.RedSox <- VectorSource(tweets.text.RedSox)
 data.corpus.RedSox <- Corpus(data.source.RedSox)
+#remove emojis
+data.corpus.RedSox <- tm_map(data.corpus.RedSox,function(x) iconv(x, 'UTF-8', 'ASCII'))
 tdm.RedSox <- TermDocumentMatrix(data.corpus.RedSox)
 inspect(data.corpus.RedSox[1:2])
 
@@ -145,6 +145,8 @@ tweets.text.Yankees <- lapply(tweetsYankees, function(i){i$getText()})
 
 data.source.Yankees <- VectorSource(tweets.text.Yankees)
 data.corpus.Yankees <- Corpus(data.source.Yankees)
+#remove emojis
+data.corpus.Yankees <- tm_map(data.corpus.Yankees,function(x) iconv(x, 'UTF-8', 'ASCII'))
 tdm.Yankees <- TermDocumentMatrix(data.corpus.Yankees)
 
 inspect(data.corpus.Yankees[1:2])
